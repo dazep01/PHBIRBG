@@ -150,12 +150,15 @@
             background: white;
             border-radius: 10px;
             overflow: hidden;
+            overflow-x: auto;
+            width: 100%; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
         }
         
         table {
             width: 100%;
+            table-layout: auto;
             border-collapse: collapse;
         }
         
@@ -371,15 +374,15 @@
                 <div class="stat-label">Total Donasi</div>
                 <div class="stat-value" id="totalAmount">Rp 0</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="display: none;">
                 <div class="stat-label">Jumlah Donatur</div>
                 <div class="stat-value" id="totalDonors">0</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="display: none;">
                 <div class="stat-label">Donasi Tertinggi</div>
                 <div class="stat-value" id="highestAmount">Rp 0</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="display: none;">
                 <div class="stat-label">Rata-rata Donasi</div>
                 <div class="stat-value" id="averageAmount">Rp 0</div>
             </div>
