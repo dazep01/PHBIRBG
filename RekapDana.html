@@ -789,6 +789,12 @@ function updateStats(donations) {
         // Update card baru
         document.getElementById('estimasiAnggaran').textContent = formatRupiah(25000000);
         document.getElementById('belumTerpenuhi').textContent = formatRupiah(25000000);
+        
+        // Atur warna default untuk card "Belum Terpenuhi"
+        const belumTerpenuhiElement = document.getElementById('belumTerpenuhi');
+        const belumTerpenuhiCard = document.getElementById('belumTerpenuhiCard');
+        belumTerpenuhiCard.className = 'stat-card danger';
+        belumTerpenuhiElement.style.color = '#d63031';
         return;
     }
     
@@ -806,37 +812,29 @@ function updateStats(donations) {
     // Nilai untuk card baru
     const estimasiAnggaran = 25000000;
     const belumTerpenuhi = estimasiAnggaran - totalAmount;
-    // Di dalam fungsi updateStats, setelah menghitung belumTerpenuhi
     
-    const belumTerpenuhiCard = document.getElementById('belumTerpenuhiCard');
-if (belumTerpenuhi > 0) {
-    belumTerpenuhiCard.className = 'stat-card danger';
-    belumTerpenuhiElement.style.color = '#d63031';
-} else {
-    belumTerpenuhiCard.className = 'stat-card success';
-    belumTerpenuhiElement.style.color = '#27ae60';
-}
-    
+    // Update semua card
     document.getElementById('totalAmount').textContent = formatRupiah(totalAmount);
     document.getElementById('totalDonors').textContent = totalDonors;
     document.getElementById('highestAmount').textContent = formatRupiah(highestAmount);
     document.getElementById('averageAmount').textContent = formatRupiah(averageAmount);
     document.getElementById('totalExpenses').textContent = formatRupiah(totalExpenses);
     document.getElementById('netBalance').textContent = formatRupiah(netBalance);
-    
-    // Update card baru
     document.getElementById('estimasiAnggaran').textContent = formatRupiah(estimasiAnggaran);
     document.getElementById('belumTerpenuhi').textContent = formatRupiah(belumTerpenuhi);
     
-    // Tambahkan warna untuk card "Belum Terpenuhi" berdasarkan kondisi
+    // Update warna dan style untuk card "Belum Terpenuhi" berdasarkan kondisi
     const belumTerpenuhiElement = document.getElementById('belumTerpenuhi');
+    const belumTerpenuhiCard = document.getElementById('belumTerpenuhiCard');
+    
     if (belumTerpenuhi > 0) {
+        belumTerpenuhiCard.className = 'stat-card danger';
         belumTerpenuhiElement.style.color = '#d63031'; // Merah jika masih ada yang belum terpenuhi
     } else {
+        belumTerpenuhiCard.className = 'stat-card success';
         belumTerpenuhiElement.style.color = '#27ae60'; // Hijau jika sudah terpenuhi atau lebih
     }
-}
-            
+}            
             // Tambah data ke Supabase
             async function addDonation(donationData) {
                 try {
