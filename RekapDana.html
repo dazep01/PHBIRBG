@@ -336,6 +336,18 @@
                 flex-direction: column;
             }
         }
+        /* Tambahkan di bagian CSS */
+.stat-card.warning {
+    border-left: 4px solid #f39c12;
+}
+
+.stat-card.danger {
+    border-left: 4px solid #d63031;
+}
+
+.stat-card.success {
+    border-left: 4px solid #27ae60;
+}
     </style>
 </head>
 <body>
@@ -373,6 +385,14 @@
             <div class="stat-card">
                 <div class="stat-label">Total Donasi</div>
                 <div class="stat-value" id="totalAmount">Rp 0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Estimasi Anggaran</div>
+                <div class="stat-value" id="estimasiAnggaran">Rp 25.000.000</div>
+            </div>
+            <div class="stat-card warning" id="belumTerpenuhiCard">
+                <div class="stat-label">Belum Terpenuhi</div>
+                <div class="stat-value" id="belumTerpenuhi">Rp 25.000.000</div>
             </div>
             <div class="stat-card" style="display: none;">
                 <div class="stat-label">Jumlah Donatur</div>
@@ -755,37 +775,67 @@
                     });
                 });
             }
-            
-            // Update statistik
-            function updateStats(donations) {
-                if (!donations || donations.length === 0) {
-                    document.getElementById('totalAmount').textContent = formatRupiah(0);
-                    document.getElementById('totalDonors').textContent = '0';
-                    document.getElementById('highestAmount').textContent = formatRupiah(0);
-                    document.getElementById('averageAmount').textContent = formatRupiah(0);
-                    document.getElementById('totalExpenses').textContent = formatRupiah(0);
-                    document.getElementById('netBalance').textContent = formatRupiah(0);
-                    return;
-                }
-                
-                // Filter data positif (donasi) dan negatif (pengeluaran)
-                const positiveDonations = donations.filter(d => parseFloat(d.amount) >= 0);
-                const expenses = donations.filter(d => parseFloat(d.amount) < 0);
-                
-                const totalAmount = positiveDonations.reduce((sum, donation) => sum + parseFloat(donation.amount || 0), 0);
-                const totalDonors = positiveDonations.length;
-                const highestAmount = positiveDonations.length > 0 ? Math.max(...positiveDonations.map(d => parseFloat(d.amount || 0))) : 0;
-                const averageAmount = totalDonors > 0 ? totalAmount / totalDonors : 0;
-                const totalExpenses = Math.abs(expenses.reduce((sum, expense) => sum + parseFloat(expense.amount || 0), 0));
-                const netBalance = totalAmount - totalExpenses;
-                
-                document.getElementById('totalAmount').textContent = formatRupiah(totalAmount);
-                document.getElementById('totalDonors').textContent = totalDonors;
-                document.getElementById('highestAmount').textContent = formatRupiah(highestAmount);
-                document.getElementById('averageAmount').textContent = formatRupiah(averageAmount);
-                document.getElementById('totalExpenses').textContent = formatRupiah(totalExpenses);
-                document.getElementById('netBalance').textContent = formatRupiah(netBalance);
-            }
+
+// Update statistik
+function updateStats(donations) {
+    if (!donations || donations.length === 0) {
+        document.getElementById('totalAmount').textContent = formatRupiah(0);
+        document.getElementById('totalDonors').textContent = '0';
+        document.getElementById('highestAmount').textContent = formatRupiah(0);
+        document.getElementById('averageAmount').textContent = formatRupiah(0);
+        document.getElementById('totalExpenses').textContent = formatRupiah(0);
+        document.getElementById('netBalance').textContent = formatRupiah(0);
+        
+        // Update card baru
+        document.getElementById('estimasiAnggaran').textContent = formatRupiah(25000000);
+        document.getElementById('belumTerpenuhi').textContent = formatRupiah(25000000);
+        return;
+    }
+    
+    // Filter data positif (donasi) dan negatif (pengeluaran)
+    const positiveDonations = donations.filter(d => parseFloat(d.amount) >= 0);
+    const expenses = donations.filter(d => parseFloat(d.amount) < 0);
+    
+    const totalAmount = positiveDonations.reduce((sum, donation) => sum + parseFloat(donation.amount || 0), 0);
+    const totalDonors = positiveDonations.length;
+    const highestAmount = positiveDonations.length > 0 ? Math.max(...positiveDonations.map(d => parseFloat(d.amount || 0))) : 0;
+    const averageAmount = totalDonors > 0 ? totalAmount / totalDonors : 0;
+    const totalExpenses = Math.abs(expenses.reduce((sum, expense) => sum + parseFloat(expense.amount || 0), 0));
+    const netBalance = totalAmount - totalExpenses;
+    
+    // Nilai untuk card baru
+    const estimasiAnggaran = 25000000;
+    const belumTerpenuhi = estimasiAnggaran - totalAmount;
+    // Di dalam fungsi updateStats, setelah menghitung belumTerpenuhi
+    
+    const belumTerpenuhiCard = document.getElementById('belumTerpenuhiCard');
+if (belumTerpenuhi > 0) {
+    belumTerpenuhiCard.className = 'stat-card danger';
+    belumTerpenuhiElement.style.color = '#d63031';
+} else {
+    belumTerpenuhiCard.className = 'stat-card success';
+    belumTerpenuhiElement.style.color = '#27ae60';
+}
+    
+    document.getElementById('totalAmount').textContent = formatRupiah(totalAmount);
+    document.getElementById('totalDonors').textContent = totalDonors;
+    document.getElementById('highestAmount').textContent = formatRupiah(highestAmount);
+    document.getElementById('averageAmount').textContent = formatRupiah(averageAmount);
+    document.getElementById('totalExpenses').textContent = formatRupiah(totalExpenses);
+    document.getElementById('netBalance').textContent = formatRupiah(netBalance);
+    
+    // Update card baru
+    document.getElementById('estimasiAnggaran').textContent = formatRupiah(estimasiAnggaran);
+    document.getElementById('belumTerpenuhi').textContent = formatRupiah(belumTerpenuhi);
+    
+    // Tambahkan warna untuk card "Belum Terpenuhi" berdasarkan kondisi
+    const belumTerpenuhiElement = document.getElementById('belumTerpenuhi');
+    if (belumTerpenuhi > 0) {
+        belumTerpenuhiElement.style.color = '#d63031'; // Merah jika masih ada yang belum terpenuhi
+    } else {
+        belumTerpenuhiElement.style.color = '#27ae60'; // Hijau jika sudah terpenuhi atau lebih
+    }
+}
             
             // Tambah data ke Supabase
             async function addDonation(donationData) {
